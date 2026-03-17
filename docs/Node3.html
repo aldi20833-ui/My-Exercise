@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tiket Transportasi</title>
+</head>
+
+<body>
+
+<div id="container"></div>
+
+<script src="Node1.js"></script>
+<script src="Node2.js"></script>
+<script src="Node3.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  const cnt = getContainer("container");
+  const inTxa = createTextarea("text-input");
+  const outTxa = createTextarea("text-output");
+  const btnDiv = createDiv("button-container");
+
+  const deBtn = createButton("de-button", "Default Data");
+  const owBtn = createButton("ow-button", "Proses Semua");
+  const coBtn = createButton("co-button", "Clear Output");
+  const ciBtn = createButton("ci-button", "Clear Input");
+  const ppBtn = createButton("pp-button", "Proses 1 Tiket");
+
+  // ✅ TAMBAHKAN DI SINI (SEBELUM DIPAKAI)
+  const kendaraan = ["🚆", "🚗", "✈️", "🚢"];
+
+  cnt.append(inTxa);
+  cnt.append(btnDiv);
+  cnt.append(outTxa);
+
+  btnDiv.append(ciBtn);
+  btnDiv.append(coBtn);
+  btnDiv.append(deBtn);
+  btnDiv.append(owBtn);
+  btnDiv.append(ppBtn);
+
+  changeElementsFlex(
+    ["text-input", "3"],
+    ["button-container", "1"], 
+    ["text-output", "3"],
+  );
+
+  // CLEAR
+  ciBtn.addEventListener("click", () => clearTextarea("text-input"));
+  coBtn.addEventListener("click", () => clearTextarea("text-output"));
+
+  // DEFAULT DATA
+  // DEFAULT DATA (DENGAN EMOJI)
+deBtn.addEventListener("click", () => {
+  inTxa.value = "🚆 Andi - Kereta Bandung 08:00";
+  inTxa.value += "\n🚗 Budi - Bus Jakarta 09:30";
+  inTxa.value += "\n✈️ Citra - Pesawat Bali 12:00";
+  inTxa.value += "\n🚢 Dewi - Kapal Batam 14:20";
+  inTxa.value += "\n🚆 Eka - Kereta Surabaya 16:45";
+});
+
+  // PROSES SEMUA
+  owBtn.addEventListener("click", () => {
+    let inLines = inTxa.value.split("\n");
+    let result = [];
+    let nomor = 1;
+
+    for (let i = 0; i < inLines.length; i++) {
+      if (inLines[i].trim() !== "") {
+
+        let text = inLines[i].toLowerCase();
+        let icon = "";
+
+        if (text.includes("kereta")) icon = kendaraan[0];
+        else if (text.includes("bus") || text.includes("mobil")) icon = kendaraan[1];
+        else if (text.includes("pesawat")) icon = kendaraan[2];
+        else if (text.includes("kapal")) icon = kendaraan[3];
+
+        result.push(icon + " Tiket #" + nomor + " ✔ " + inLines[i]);
+        nomor++;
+      }
+    }
+
+    outTxa.value = result.join("\n");
+  });
+
+  // PROSES 1 TIKET
+  ppBtn.addEventListener("click", () => {
+    let inLines = inTxa.value.split("\n").filter(l => l.trim() !== "");
+    let outLines = outTxa.value.split("\n").filter(l => l.trim() !== "");
+
+    if (inLines.length > 0) {
+      let item = inLines.pop();
+      let text = item.toLowerCase();
+      let icon = "";
+
+      if (text.includes("kereta")) icon = kendaraan[0];
+      else if (text.includes("bus") || text.includes("mobil")) icon = kendaraan[1];
+      else if (text.includes("pesawat")) icon = kendaraan[2];
+      else if (text.includes("kapal")) icon = kendaraan[3];
+
+      let nomor = outLines.length + 1;
+      outLines.push(icon + " Tiket #" + nomor + " ✔ " + item);
+    }
+
+    inTxa.value = inLines.join("\n");
+    outTxa.value = outLines.join("\n");
+  });
+
+});
+</script>
+
+</body>
+</html>

@@ -4,41 +4,59 @@
     <title>My Exercise</title>
     <style>
         body {
-            font-family: Arial;
-            background: #f4f4f4;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            font-family: Arial, sans-serif;
+            color: white;
             text-align: center;
         }
+
+        .container {
+            background: rgba(0,0,0,0.3);
+            padding: 40px;
+            border-radius: 15px;
+        }
+
         h1 {
-            color: #333;
+            font-size: 50px;
+            margin-bottom: 10px;
         }
-        ul {
-            list-style: none;
-            padding: 0;
+
+        p {
+            font-size: 20px;
+            margin-bottom: 30px;
         }
-        li {
-            margin: 15px;
-        }
+
         a {
+            display: block;
+            margin: 10px;
             text-decoration: none;
-            background: #3498db;
-            color: white;
-            padding: 10px 20px;
+            background: white;
+            color: #333;
+            padding: 12px 25px;
             border-radius: 8px;
+            font-weight: bold;
         }
+
         a:hover {
-            background: #2980b9;
+            background: #ddd;
         }
     </style>
 </head>
 <body>
 
-<h1>🚀 My Exercise</h1>
+<div class="container">
+    <h1>My Exercise</h1>
+    <p>Akhmad Rosyidan Rifaldi_20224019</p>
 
-<ul>
-    <li><a href="Node1.html">Node 1</a></li>
-    <li><a href="Node2.html">Node 2</a></li>
-    <li><a href="Node3.html">Node 3</a></li>
-</ul>
+    <a href="Node1.html">Node 1</a>
+    <a href="Node2.html">Node 2</a>
+    <a href="Node3.html">Node 3</a>
+</div>
 
 </body>
 </html>

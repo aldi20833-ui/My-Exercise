@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+
+
+<head>
+  <title>26b39</title>
+</head>
+
+<body>
+
+<div id="container"></div>
+<script src="Node1.js"></script>
+
+<script>
+// Instantiate container and output textarea
+let cnt = getContainer("container");
+let txa = createTextarea("text-output");
+
+// Append textarea to container
+cnt.append(txa);
+
+// Bind consolex output to textarea
+consolex.setOutput(txa);
+
+// Emit test log entries
+consolex.log("Hello, everyon!", "this is my first time learning HTML.");
+consolex.log("My name is Syidan.");
+consolex.log("I am learning how html and js are displayed on web page.");
+consolex.log("So far, I've realized that even a small line of code can create something visible on a browser. ");
+consolex.log("I've reliazed also that understanding these technologies is fundamental to how website are build.");
+consolex.log("Thank you, and that is all for now😃");
+</script>
+
+
+</body>
+
+
+
+</html>

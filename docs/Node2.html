@@ -1,0 +1,48 @@
+<div id="container"><div>
+
+<script src="Node1.js"></script>
+<script src="Node2.js"></script>
+
+<script>
+// Instantiate containers, output textarea, and buttons
+const cnt = getContainer("container");
+const txa = createTextarea("text-output");
+const btnDiv = createDiv("button-container");
+
+const kBtn = createButton("k-button", "Kereta");
+const mBtn = createButton("m-button", "Mobil");
+const pBtn = createButton("p-button", "Pesawat");
+const lBtn = createButton("l-button", "Kapal");
+const xBtn = createButton("x-button", "Newline");
+
+// Append textarea to container
+cnt.append(txa);
+cnt.append(btnDiv);
+btnDiv.append(kBtn);
+btnDiv.append(mBtn);
+btnDiv.append(pBtn);
+btnDiv.append(lBtn);
+btnDiv.append(xBtn);
+
+// Change elements flex value
+changeElementsFlex(
+  ["text-output", "3"],
+  ["button-container", "1"]  
+);
+
+// Bind consolex output to textarea and set EOL character
+consolex.setOutput(txa);
+consolex.setEOL("");
+
+// Define list of transport icons
+const kendaraan = ["🚆", "🚗", "✈️", "🚢"];
+
+// Set onclick event to each b
+kBtn.addEventListener("click", () => { txa.value += kendaraan[0]; });
+mBtn.addEventListener("click", () => { txa.value += kendaraan[1]; });
+pBtn.addEventListener("click", () => { txa.value += kendaraan[2]; });
+lBtn.addEventListener("click", () => { txa.value += kendaraan[3]; });
+
+xBtn.addEventListener("click", () => { txa.value += "\n"; });
+
+</script>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Simulasi BLDC Motor</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
+    h1   { text-align: center; font-size: 20px; margin-bottom: 16px; }
+
+    /* 3 kolom utama */
+    .kolom { display: flex; gap: 50px; max-width: 1500px; margin: 0 auto; }
+
+    /* setiap kotak */
+    .kotak {
+      background: white;
+      border: 2px solid #999;
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .kotak h2 { font-size: 14px; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+
+    .kotak-input  { width: 220px; flex-shrink: 0; }
+    .kotak-output { width: 220px; flex-shrink: 0; }
+    .kotak-animasi { flex: 1; }
+
+    textarea {
+      width: 100%;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      padding: 8px;
+      font-family: monospace;
+      font-size: 13px;
+      resize: vertical;
+      box-sizing: border-box;
+      background: #fafafa;
+    }
+
+    button {
+      width: 100%; margin-top: 10px; padding: 9px;
+      font-size: 14px; font-weight: bold; cursor: pointer;
+      border-radius: 4px; border: 1px solid #333;
+    }
+    #btnHitung { background: #ddd; }
+    #btnJalan  { background: #aee; }
+    #btnStop   { background: #ecc; margin-top: 5px; }
+
+    canvas {
+      display: block;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      background: white;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .ket { font-size: 10px; color: #666; text-align: center; margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+
+<h1>Simulasi Prinsip Kerja BLDC Motor — Medan Magnet & Rotor Stator</h1>
+
+<div class="kolom">
+
+  <!-- ===== KOTAK INPUT ===== -->
+  <div class="kotak kotak-input">
+    <h2>INPUT</h2>
+    <textarea id="txtInput" rows="12">V  = 24
+I  = 5
+N  = 100
+L  = 0.10
+f  = 0.7
+P  = 2 </textarea>
+
+    <p style="font-size:11px;color:#888;margin-top:6px;line-height:1.7">
+      V  = Tegangan (Volt)<br>
+      I  = Kuat Arus (A)<br>
+      N  = Jumlah Lilitan<br>
+      L  = Panjang Kumparan (m)<br>
+      f  = Frekuensi (Hz)<br>
+      P  = Jumlah Pole
+    </p>
+
+    <button id="btnHitung" onclick="hitung()">HITUNG OUTPUT</button>
+    <button id="btnJalan"  onclick="jalankan()">▶ JALANKAN MOTOR</button>
+    <button id="btnStop"   onclick="hentikan()">■ STOP</button>
+  </div>
+
+  <!-- ===== KOTAK OUTPUT ===== -->
+  <div class="kotak kotak-output">
+    <h2>OUTPUT</h2>
+    <textarea id="txtOutput" rows="28" readonly>Tekan HITUNG OUTPUT
+untuk melihat hasil...</textarea>
+
+    <p style="font-size:11px;color:#888;margin-top:8px;line-height:1.8">
+      <b>Rumus yang digunakan:</b><br>
+      B = μ₀×N×I / (2×L)<br>
+      τ = N×F×r (Torsi)<br>
+      ω = τ / b<br>
+      RPM = ω×60 / 2π<br>
+      P = τ × ω (Daya)
+    </p>
+  </div>
+
+  <!-- ===== KOTAK ANIMASI ===== -->
+  <div class="kotak kotak-animasi">
+    <h2>ANIMASI</h2>
+
+    <div class="ket">Canvas 1 — Animasi Lilitan Solenoida & Arah Medan B</div>
+    <canvas id="kanvas1" height="180"></canvas>
+
+    <div class="ket">Canvas 2 — Rotor & Stator (Gaya Tarik-Tolak)</div>
+    <canvas id="kanvas2" height="420"></canvas>
+  </div>
+
+</div>
+
+<hr style="margin:30px 0">
+
+ <!-- DESKRIPSI -->
+
+<h2 style="text-align:center;">DESKRIPSI APLIKASI</h2>
+<textarea 
+rows="45" 
+style="width:80%; display:block; margin:auto;" 
+readonly>
+Aplikasi ini merupakan simulasi interaktif prinsip kerja motor BLDC (Brushless DC Motor).
+Sebelum masuk ke tahap kerja BLDC aplikasi ini mencoba memahami dahulu tentang percobaan orsted yaitu sebuah kawat yang dialiri arus listrik akan timbul medan magnet. 
+kawat yang dililitkan pada suatu material logam membentuk selenoid akan mengakibatkan logam memeiliki sifat kemagnetan berdasarkan arus listrik yang mengalir.
+perubahan kutub magnet pada kumparan atau pole pairs akan disesuaikan dengan magnet permanen yang diletakkan di rotor, sehingga terjadi gaya tolak menolak dan taraik menarik 
+antara stator dan rotor sesuai perintah driver alhasil rotor akan bergerak secara terus menerus.
+Simulasi ini menunjukkan hubungan antara parameter listrik seperti tegangan, arus, jumlah lilitan, frekuensi, dan jumlah pole terhadap medan magnet, kecepatan putar (RPM), dan torsi motor.
+
+
+# Penjelasan Penggunaan Parameter Input Terdiri dari 
+
+V = Tegangan Listrik satuan volt memiliki rentang 0- 100
+I = kuat arus listrik satuan amper memiliki rentang 0-100
+N = jumlah lilitan kawat pada selenoid memiliki rentang 0-200
+L = panjang kumparan kawat atau selenoid satuan meter 0-1 
+f = frekuensi aliran listrik satuan hz memiliki rentang 0-50
+p = jumlah pole pada rotor memiliki nilai 2, 4, dan 8
+
+
+# Penjelasan Penggunaan Button yang digunakan terdiri dari 
+
+Tombol Hitung Output = tombol ini akan mengkalkulasi parameter input yang telah ditulis kemudian menghasilkan nilai output nilai B, RPM, Torsi, Omega dan Daya
+Tombol Jalankan Motor = tombol ini untuk memutar simulasi cara kerja rotor dan stator pada motor bldc
+Tombol Stop = tombol ini untuk menghentikan simulasi motor
+
+
+# Penjelasan Penggunaan Parameter Output Terdiri dari 
+
+B (Medan Magnet UJung Selenoid)= output ini menunjukkan besarnya medan magnet yang terbentuk pada lilitan kawat
+RPM = output ini menunjukkan kecepatan putar motor bldc 
+Torsi = menunjukkan kekuatan atau ukuran kekuatan putar pada poros motor bldc
+w (kecepatan sudut) = menunjukkan seberapa cepat poros motor berputar dalam satuan sudut per detik. Satuan adalah (rad/s).
+P (daya)= menunjukkan daya yang bekerja atau yang dibutuhkan pada saat motor bergerak
+
+
+Petunjuk Melakukan Simulasi 
+
+1. Masukkan parameter pada kolom INPUT.
+2. Klik "HITUNG OUTPUT" untuk melihat hasil.
+3. Klik "JALANKAN MOTOR" untuk melihat animasi.
+4. Klik "STOP" untuk menghentikan animasi.
+</textarea>
+
+<h2 style="text-align:center;">KONSEP & ALGORITMA</h2>
+<textarea 
+rows="40" 
+style="width:80%; display:block; margin:auto;" 
+readonly>
+Simulasi ini dirancang sebagai mockup awal untuk memodelkan prinsip kerja motor BLDC menggunakan pendekatan numerik sederhana.
+
+Konsep utama yang digunakan adalah menghubungkan parameter listrik (tegangan, arus, frekuensi, jumlah lilitan, dan jumlah pole) dengan besaran fisik seperti medan magnet, kecepatan putar, dan torsi.
+
+Algoritma numerik yang digunakan saat ini bersifat langsung (non-iteratif), yaitu:
+
+1. Medan magnet dihitung menggunakan model solenoida:
+   B = (μ₀ × N × I) / (2 × L)
+
+2. Kecepatan putar motor dihitung menggunakan model motor sinkron:
+   RPM = (120 × f) / P
+
+3. Kecepatan sudut dihitung dari RPM:
+   ω = (2π × RPM) / 60
+
+4. Daya listrik dihitung dari:
+   P = V × I
+
+5. Torsi motor diperoleh dari hubungan daya:
+   τ = P / ω
+
+Pada tahap ini, model masih berupa pendekatan sederhana tanpa mempertimbangkan efek dinamis seperti perubahan arus terhadap waktu, back EMF, maupun beban mekanik.
+
+
+Penjelasan Konsep Canvas 
+
+Canvas digunakan untuk memvisualisasikan fenomena fisika dalam simulasi motor BLDC secara dinamis. Dengan menggunakan API Canvas 2D pada JavaScript, objek seperti kumparan, medan magnet, rotor, dan stator digambar berdasarkan koordinat kartesian. Animasi dilakukan menggunakan metode requestAnimationFrame, di mana setiap frame sistem akan memperbarui posisi sudut rotor berdasarkan kecepatan sudut (ω), kemudian menggambar ulang seluruh sistem. Perubahan sudut rotor juga mempengaruhi komutasi 3-fasa, yang disimulasikan menggunakan logika diskrit 6 langkah. Dengan demikian, canvas tidak hanya berfungsi sebagai visualisasi statis,  tetapi juga sebagai representasi dinamis dari hubungan antara parameter listrik dan gerak mekanik pada motor BLDC.
+
+/*
+ PENJELASAN FUNGSI loopAnimasi()
+
+ Fungsi ini adalah inti dari animasi motor BLDC.
+ Cara kerjanya: menghitung perubahan waktu, mengupdate posisi rotor,
+ menentukan komutasi, menggambar ulang, lalu mengulang terus menerus.
+*/
+
+function loopAnimasi(waktu) {
+
+  // Hitung selang waktu (dt) dalam detik
+  // dt = waktu sekarang - waktu sebelumnya
+  // dibatasi maksimum 0.05 detik agar animasi tidak loncat saat lag
+  var dt = Math.min((waktu - motor.waktuLalu) / 1000, 0.05);
+  motor.waktuLalu = waktu;
+
+  // Jalankan animasi hanya jika motor aktif
+  if (motor.berjalan) {
+
+    // 1. Update posisi rotor
+    // Persamaan: θ = θ + ω·dt
+    // Ini adalah metode numerik Euler (integrasi sederhana)
+    motor.sudut += motor.omega * dt;
+
+    // 2. Hitung sudut listrik
+    // Sudut listrik tergantung jumlah pole (P)
+    var sudutListrik = motor.sudut * (motor.P / 2);
+
+    // 3. Tentukan langkah komutasi (6-step BLDC)
+    // 1 putaran dibagi menjadi 6 bagian (tiap 60 derajat)
+    var langkah = Math.floor(
+      ((sudutListrik % (2 * Math.PI)) / (2 * Math.PI)) * 6
+    );
+
+    // 4. Batasi nilai langkah antara 0 sampai 5
+    // agar tidak keluar dari array KOMUTASI
+    motor.langkah = Math.max(0, Math.min(5, langkah));
+
+    // 5. Ambil kombinasi fase dari tabel komutasi
+    // Contoh: [1, -1, 0] → fase A positif, B negatif, C mati
+    motor.fase = KOMUTASI[motor.langkah];
+
+    // 6. Gambar ulang canvas
+    // Canvas akan di-clear lalu digambar ulang sesuai posisi baru
+    gambarKanvas1();
+    gambarKanvas2();
+
+    // 7. Ulangi animasi
+    // requestAnimationFrame akan memanggil fungsi ini lagi (~60 FPS)
+    motor.animId = requestAnimationFrame(loopAnimasi);
+  }
+}
+
+
+</textarea>
+
+<h2 style="text-align:center;">PENGEMBANGAN SELANJUTNYA</h2>
+<textarea 
+rows="13" 
+style="width:80%; display:block; margin:auto;" 
+readonly>
+Untuk pengembangan di masa mendatang, simulasi ini dapat ditingkatkan menggunakan algoritma numerik berbasis waktu (time-stepping), seperti metode Euler atau Runge-Kutta, untuk menyelesaikan persamaan diferensial sistem motor:
+
+J(dω/dt) = τ_motor − τ_beban
+
+Selain itu, model juga dapat dikembangkan dengan menambahkan:
+- Back EMF (E = k_e ω)
+- Model rangkaian listrik motor
+- Efisiensi sistem
+- Kontrol PWM (Pulse Width Modulation)
+
+Dengan pengembangan tersebut, simulasi dapat berubah dari mockup sederhana menjadi simulasi fisika yang lebih realistis dan dinamis.
+</textarea>
+
+
+
+
+
+<script src="bldc.js"></script>
+</body>
+</html>

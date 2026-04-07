@@ -1,0 +1,70 @@
+/* note.css */
+
+.note-container {
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+.note-title {
+  color: var(--fg);
+}
+
+.note-content {
+  color: var(--fg);
+}
+
+.note-content h2 {
+  border: 0px #4f81bd solid;
+  border-bottom: 0px solid var(--accent);
+  margin-bottom: -0.5em;
+}
+
+.info-after-title {
+  display: flex;
+  color: var(--muted-text);
+}
+
+.date-reading-time-edit {
+  flex: 2.5;
+  text-align: right;
+  border: 0px solid blue;
+}
+
+.authors-container {
+  flex: 5;
+  padding-left: 0;
+  margin: 0;
+  border: 0px solid blue;
+}
+
+.author {
+  display: inline-block;
+}
+
+.author::after {
+  content: ",";
+}
+
+.author:last-child::after {
+  content: "";
+}
+
+.note-content pre {
+  padding: 1.5em 2em;
+  word-wrap: break-word;
+  background: var(--code-bg);
+  color: var(--code-text);
+  overflow-x: scroll;
+}
+
+.mol-container {
+  margin: auto;
+  position: relative;
+  height: 300px;
+  width: 300px;
+}
+
+.scatter-container {
+  width: 360px;
+  height: 200px;
+}

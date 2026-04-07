@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <meta name="color-scheme" content="light dark">
+
+  <link rel="icon" href="/iconweb.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="iconweb.png" sizes="16x16" type="image/png">
+  <link rel="apple-touch-icon" href="iconweb.png">
+  
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#1a1a1a">
+
+  <title>mockup-t5 v0.1 | butiran-✗</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="26cb0-style1.css">
+  <link rel="stylesheet" href="26cb0-style2.css">
+  <link rel="stylesheet" href="26cb0-style3-header.css">
+  <link rel="stylesheet" href="26cb0-style4-footer.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <!-- JS -->
+  <script src="26cb0-Hugo-info.js" defer></script>
+  <script src="26cb0.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1>Chaining Panels</h1>
+    <!-- <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+      </ul>
+    </nav> -->
+  </header>
+
+  <main>
+    <div class="note-container">
+      <h1 class="note-title">mockup-t5 v0.1</h1>
+      
+      <div class="info-after-title">
+        <ul class="authors-container">
+          <li class="author">
+            <span>Syidan</span>
+          </li>
+        </ul>
+
+        <div class="date-reading-time-edit">
+          <time datetime="2026-03-31T04:30:41+07:00">6 April 2026</time>
+          &#183; 1 min read &#183;
+          <a class="link" href="#">edit</a>
+        </div>
+      </div>
+
+      <div class="note-content">
+        <p>It is an illustration of chaining panels.</p>
+
+        <div id="cnt1"></div>
+        <div id="cnt2"></div>
+        <div id="cnt3"></div>
+        <div id="cnt4"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>
+      Copyright Syidan 2026
+      <a href="/butiran/h2/" style="cursor:text">.</a>
+      All rights reserved. Unless stated otherwise in a note.
+    </p>
+  </footer>
+
+  <!-- Mount JS -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      _26cb0.mount1("cnt1");
+      _26cb0.mount2("cnt2");
+      _26cb0.mount3("cnt3");
+      _26cb0.mount4("cnt4");
+    });
+  </script>
+
+  <!-- Mermaid -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@9.3.0/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "neutral",
+      themeVariables: {
+        fontSize: "20px",
+        nodeFontSize: "18px",
+        labelFontSize: "14px"
+      }
+    });
+  </script>
+</body>
+</html>
